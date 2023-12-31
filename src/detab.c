@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-void detab(char *to, char *from, size_t tabstop);
-
 #define TABSTOP 8
+
+void detab(char *to, char *from, size_t tabstop);
 
 int main(int argc, char **argv)
 {
@@ -48,33 +48,35 @@ int main(int argc, char **argv)
 // TODO: Make this shit deal with newlines itself,
 // this garbage only works when _from_ points to a single line,
 // if its more than a line, it fucks up the tabstops.
+// Also this just looks ugly as shit
+// At this point should rewrite it
 void detab(char *to, char *from, size_t tabstop)
 {
-    int next_tabstop = tabstop;
+    int tabstop_next = tabstop;
     size_t from_size = strlen(from);
 
-    int to_i = 0;
-    int from_i = 0;
+    int i_to = 0;
+    int i_from = 0;
 
-    while (from_i < from_size) {
-        if (from[from_i] != '\t') {
-            to[to_i] = from[from_i];
-            next_tabstop--;
-            to_i++;
-            from_i++;
+    while (i_from < from_size) {
+        if (from[i_from] != '\t') {
+            to[i_to] = from[i_from];
+            tabstop_next--;
+            i_to++;
+            i_from++;
         } else {
-            for (int i = 0; i <= next_tabstop; i++) {
-                to[to_i + i] = ' ';
+            for (int i = 0; i <= tabstop_next; i++) {
+                to[i_to + i] = ' ';
             }
-            to_i += next_tabstop;
-            from_i++;
-            next_tabstop = tabstop;
+            i_to += tabstop_next;
+            i_from++;
+            tabstop_next = tabstop;
         }
 
-        if (next_tabstop == 0) {
-            next_tabstop = tabstop;
+        if (tabstop_next == 0) {
+            tabstop_next = tabstop;
         }
     }
 
-    to[to_i] = '\0';
+    to[i_to] = '\0';
 }
